@@ -7,7 +7,6 @@ import PageTransition from "@/components/PageTransition";
 import ProductCard from "@/components/ProductCard";
 import {
   categories,
-  products,
   skinTypes,
   type Category,
   type Product,
@@ -37,9 +36,19 @@ export default function ProductsPage() {
   const [minRating, setMinRating] = useState(0);
   const [sort, setSort] = useState<SortOption>("popular");
 
+  const [dbProducts, setDbProducts] = useState<Product[]>([]);
+
   useEffect(() => {
-    const timer = setTimeout(() => setLoading(false), 800);
-    return () => clearTimeout(timer);
+    fetch("/api/products")
+      .then((res) => res.json())
+      .then((data) => {
+        setDbProducts(data);
+        setLoading(false);
+      })
+      .catch((err) => {
+        console.error("Failed to fetch products:", err);
+        setLoading(false);
+      });
   }, []);
 
   const toggleCategory = (cat: Category) => {
@@ -55,7 +64,7 @@ export default function ProductsPage() {
   };
 
   const filteredProducts = useMemo(() => {
-    let result = [...products];
+    let result = [...dbProducts];
 
     if (selectedCategories.length) {
       result = result.filter((p) => selectedCategories.includes(p.category));
@@ -92,7 +101,7 @@ export default function ProductsPage() {
     }
 
     return result;
-  }, [selectedCategories, selectedSkinTypes, priceRange, minRating, sort]);
+  }, [dbProducts, selectedCategories, selectedSkinTypes, priceRange, minRating, sort]);
 
   const FilterSidebar = ({ mobile = false }: { mobile?: boolean }) => (
     <div className={cn("space-y-6", mobile && "p-4")}>

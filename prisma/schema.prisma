@@ -1,0 +1,51 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Product {
+  id          String   @id @default(cuid())
+  name        String
+  price       Float
+  category    String
+  
+  // Stored as comma-separated values for simplicity
+  skinType    String
+  images      String
+  
+  rating      Float    @default(0)
+  reviewCount Int      @default(0)
+  stock       Int      @default(0)
+  badge       String?
+  description String
+  ingredients String
+  howToUse    String
+  
+  // Marketplace addition
+  sellerName  String   @default("GlowDifferent Official")
+  
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  reviews     Review[]
+}
+
+model Review {
+  id        String   @id @default(cuid())
+  author    String
+  rating    Int
+  date      String
+  comment   String
+  verified  Boolean  @default(false)
+  helpful   Int      @default(0)
+  
+  productId String
+  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+}

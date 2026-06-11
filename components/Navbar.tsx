@@ -13,6 +13,7 @@ const navLinks = [
   { href: "/", label: "Home" },
   { href: "/products", label: "Shop" },
   { href: "/rewards", label: "Rewards" },
+  { href: "/seller", label: "Sell" },
 ];
 
 export default function Navbar() {

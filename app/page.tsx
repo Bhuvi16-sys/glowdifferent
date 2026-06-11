@@ -7,7 +7,8 @@ import MarqueeBanner from "@/components/MarqueeBanner";
 import PageTransition from "@/components/PageTransition";
 import ProductCard from "@/components/ProductCard";
 import SkinQuiz from "@/components/SkinQuiz";
-import { getBestsellers, getTrendingProducts } from "@/data/products";
+import { type Product } from "@/data/products";
+import { useEffect, useState } from "react";
 
 const whyUsItems = [
   {
@@ -37,8 +38,19 @@ const whyUsItems = [
 ];
 
 export default function HomePage() {
-  const trending = getTrendingProducts();
-  const bestsellers = getBestsellers();
+  const [trending, setTrending] = useState<Product[]>([]);
+  const [bestsellers, setBestsellers] = useState<Product[]>([]);
+
+  useEffect(() => {
+    fetch("/api/products")
+      .then((res) => res.json())
+      .then((data: Product[]) => {
+        // Simplified mock logic: just take first 8 for trending, next 3 for bestsellers
+        setTrending(data.slice(0, 8));
+        setBestsellers(data.slice(0, 3).sort((a, b) => b.rating - a.rating));
+      })
+      .catch((err) => console.error("Error fetching products:", err));
+  }, []);
 
   return (
     <PageTransition>

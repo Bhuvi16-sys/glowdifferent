@@ -1,17 +1,25 @@
 import { notFound } from "next/navigation";
 import ProductDetailClient from "@/components/ProductDetailClient";
-import { getProductById, products } from "@/data/products";
+import { prisma } from "@/lib/prisma";
 
 interface ProductPageProps {
   params: { id: string };
 }
 
-export function generateStaticParams() {
-  return products.map((p) => ({ id: p.id }));
-}
+export default async function ProductPage({ params }: ProductPageProps) {
+  const product = await prisma.product.findUnique({
+    where: { id: params.id },
+    include: { reviews: true },
+  });
 
-export default function ProductPage({ params }: ProductPageProps) {
-  const product = getProductById(params.id);
   if (!product) notFound();
-  return <ProductDetailClient product={product} />;
+
+  // Format to match expected frontend interface
+  const formattedProduct = {
+    ...product,
+    skinType: product.skinType.split(","),
+    images: product.images.split(","),
+  };
+
+  return <ProductDetailClient product={formattedProduct as any} />;
 }
