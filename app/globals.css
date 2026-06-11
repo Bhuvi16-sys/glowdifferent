@@ -3,25 +3,130 @@
 @tailwind utilities;
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #fafafa;
+  --foreground: #1a1a2e;
+  --hot-pink: #ff2d8a;
+  --violet: #8b2bff;
+  --coral: #ff6b35;
+  --mint: #00e5a0;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #ff2d8a #f0f0f0;
 }
 
 body {
   color: var(--foreground);
   background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-inter), system-ui, sans-serif;
+  overflow-x: hidden;
+}
+
+@layer components {
+  .glass {
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    background: rgba(255, 255, 255, 0.6);
+    backdrop-filter: blur(24px);
+  }
+
+  .glass-card {
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    background: rgba(255, 255, 255, 0.6);
+    backdrop-filter: blur(24px);
+    border-radius: 1rem;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+    transition: all 0.3s;
+  }
+
+  .glass-card:hover {
+    border-color: rgba(255, 45, 138, 0.3);
+    box-shadow: 0 0 20px rgba(255, 45, 138, 0.3);
+  }
+
+  .btn-primary {
+    position: relative;
+    overflow: hidden;
+    border-radius: 9999px;
+    background: linear-gradient(135deg, #ff2d8a 0%, #8b2bff 50%, #ff6b35 100%);
+    padding: 0.75rem 1.5rem;
+    font-family: var(--font-space-grotesk), sans-serif;
+    font-weight: 600;
+    color: white;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s;
+  }
+
+  .btn-primary:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 20px rgba(255, 45, 138, 0.3);
+  }
+
+  .btn-primary:active {
+    transform: scale(0.95);
+  }
+
+  .btn-secondary {
+    border-radius: 9999px;
+    border: 2px solid rgba(139, 43, 255, 0.3);
+    background: rgba(255, 255, 255, 0.8);
+    padding: 0.75rem 1.5rem;
+    font-family: var(--font-space-grotesk), sans-serif;
+    font-weight: 600;
+    color: #8b2bff;
+    backdrop-filter: blur(4px);
+    transition: all 0.3s;
+  }
+
+  .btn-secondary:hover {
+    transform: scale(1.05);
+    border-color: #8b2bff;
+    background: rgba(139, 43, 255, 0.1);
+  }
+
+  .btn-secondary:active {
+    transform: scale(0.95);
+  }
+
+  .gradient-text {
+    background: linear-gradient(135deg, #ff2d8a 0%, #8b2bff 50%, #ff6b35 100%);
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
+  }
+
+  .shimmer {
+    background: linear-gradient(
+      90deg,
+      rgba(255, 255, 255, 0) 0%,
+      rgba(255, 255, 255, 0.6) 50%,
+      rgba(255, 255, 255, 0) 100%
+    );
+    background-size: 200% 100%;
+    animation: shimmer 2s linear infinite;
+  }
 }
 
 @layer utilities {
   .text-balance {
     text-wrap: balance;
+  }
+
+  .hide-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  .hide-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
   }
 }
