@@ -84,8 +84,8 @@ export default function SellerDashboard() {
       setTimeout(() => {
         router.push("/");
       }, 2000);
-    } catch (err: any) {
-      setError(err.message || "An unexpected error occurred");
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "An unexpected error occurred");
     } finally {
       setIsSubmitting(false);
     }
@@ -103,7 +103,7 @@ export default function SellerDashboard() {
           </div>
 
           <p className="text-neutral-600 mb-8">
-            List your new skincare product on GlowDifferent's marketplace. 
+            List your new skincare product on GlowDifferent&apos;s marketplace. 
             Fill out the details below to add it instantly to the catalog!
           </p>
 
