@@ -40,9 +40,18 @@ export default function ProductsPage() {
 
   useEffect(() => {
     fetch("/api/products")
-      .then((res) => res.json())
+      .then((res) => {
+        if (!res.ok) {
+          throw new Error("Failed to fetch products");
+        }
+        return res.json();
+      })
       .then((data) => {
-        setDbProducts(data);
+        if (Array.isArray(data)) {
+          setDbProducts(data);
+        } else {
+          console.error("Expected array but got:", data);
+        }
         setLoading(false);
       })
       .catch((err) => {

@@ -43,11 +43,20 @@ export default function HomePage() {
 
   useEffect(() => {
     fetch("/api/products")
-      .then((res) => res.json())
+      .then((res) => {
+        if (!res.ok) {
+          throw new Error("Failed to fetch products");
+        }
+        return res.json();
+      })
       .then((data: Product[]) => {
-        // Simplified mock logic: just take first 8 for trending, next 3 for bestsellers
-        setTrending(data.slice(0, 8));
-        setBestsellers(data.slice(0, 3).sort((a, b) => b.rating - a.rating));
+        if (Array.isArray(data)) {
+          // Simplified mock logic: just take first 8 for trending, next 3 for bestsellers
+          setTrending(data.slice(0, 8));
+          setBestsellers(data.slice(0, 3).sort((a, b) => b.rating - a.rating));
+        } else {
+          console.error("Expected array but got:", data);
+        }
       })
       .catch((err) => console.error("Error fetching products:", err));
   }, []);
